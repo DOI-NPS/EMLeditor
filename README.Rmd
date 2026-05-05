@@ -17,8 +17,9 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 
-[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental) [![CodeFactor](https://www.codefactor.io/repository/github/roblbaker/emleditor/badge)](https://www.codefactor.io/repository/github/roblbaker/emleditor)
-[![R-CMD-check](https://github.com/nationalparkservice/EMLeditor/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/nationalparkservice/EMLeditor/actions/workflows/R-CMD-check.yaml)
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![R-CMD-check](https://github.com/DOI-NPS/EMLeditor/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/DOI-NPS/EMLeditor/actions/workflows/R-CMD-check.yaml)
+[![Codecov test coverage](https://codecov.io/gh/DOI-NPS/EMLeditor/graph/badge.svg)](https://app.codecov.io/gh/DOI-NPS/EMLeditor)
 <!-- badges: end -->
 
 # EMLeditor
