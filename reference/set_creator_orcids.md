@@ -1,0 +1,79 @@
+# Allows user to add ORCids to the creator
+
+`set_creator_orcids()` allows users to add (or remove) ORCiDs to
+creators or edit/update existing ORCiDs associated with creators. ORCiDs
+are persistent digital identifiers associated with individual people and
+remain constant despite name changes. They can help disambiguate
+creators with similar names and associate all the products of one
+creator in one space despite variations in how the name was used (e.g.
+Rob Baker and Robert Baker and Robert L. Baker but NOT any of the 15
+million or so other Robert Bakers). To register an ORCiD or manage your
+ORCiD profile, go to <https://orcid.org/>.
+
+## Usage
+
+``` r
+set_creator_orcids(eml_object, orcids, force = FALSE, NPS = TRUE)
+```
+
+## Arguments
+
+- eml_object:
+
+  is an EML-formatted R object, either generated in R or imported
+  (typically from an EML-formatted .xml file) using EML::read_eml(,
+  from="xml").
+
+- orcids:
+
+  String. One or more ORCiDs listed in the same order as the
+  corresponding creators. Use "NA" if a creator does not have an ORCiD.
+  Do not include the full URL. Format as: xxxx-xxxx-xxxx-xxxx (the
+  https://orcid.org/ prefix will be added for you).
+
+- force:
+
+  logical. Defaults to false. If set to FALSE, a more interactive
+  version of the function requesting user input and feedback. Setting
+  force = TRUE facilitates scripting.
+
+- NPS:
+
+  Logical. Defaults to TRUE. **Most NPS users should leave this as the
+  default**. Only under specific circumstances should it be set to
+  FALSE: if you are **not** publishing with NPS, if you need to set the
+  publisher location to some place other than the Fort Collins Office
+  (e.g. you are NOT working on a data package) or your product is "for"
+  the NPS but not "by" the NPS and you need to specify a different
+  agency, set NPS = FALSE. When NPS=TRUE, the function will over-write
+  existing publisher info and inject NPS as the publisher along the the
+  Central Office in Fort Collins as the location. Additionally, it sets
+  the "for or by NPS" field to TRUE and specifies the originating agency
+  as NPS.
+
+## Value
+
+eml_object
+
+## Details
+
+ORCiDs should be supplied as a list in the order in which the creators
+are listed. If a creator does not have an ORCiD, put NA (NO quotes
+around NA!) in the list in that space. Only consider individual people
+who are creators (and not organizations, they will automatically be
+skipped). ORCiDs should be supplied as a 16-digit string with hyphens
+after every 4 digits: xxxx-xxxx-xxxx-xxxx. Please do not include the URL
+prefix for your ORCiDs; this will automatically be inserted for you.
+
+## Examples
+
+``` r
+if (FALSE) { # \dontrun{
+#only one creator:
+mymetadata <- set_creator_orcids(mymetadata, 1234-1234-1234-1234)
+
+#three creators, the second of which does not have an ORCiD:
+creator_orcids <- c("1234-1234-1234-1234", NA, "4321-4321-4321-4321")
+mymetadata <- set_creator_orcids(mymetadata, creator_orcids)
+} # }
+```

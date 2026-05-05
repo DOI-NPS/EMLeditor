@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">EMLeditor</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,7 +27,7 @@
 <li class="active nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/nationalparkservice/EMLeditor/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/doi-NPS/EMLeditor/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul></div>
 
 
@@ -37,9 +37,46 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/nationalparkservice/EMLeditor/blob/v1.1.0/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/doi-NPS/EMLeditor/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.2.1" id="emleditor-v121-development-version">EMLeditor v1.2.1 (Development version)<a class="anchor" aria-label="anchor" href="#emleditor-v121-development-version"></a></h2>
+<div class="section level3">
+<h3 id="id_2026-1-2-1">2026-05-05<a class="anchor" aria-label="anchor" href="#id_2026-1-2-1"></a></h3>
+<ul><li>Updated EML script .rmd to include package names when suggesting running <code>issues()</code> function.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="id_2026-1-2-1-1">2026-04-22<a class="anchor" aria-label="anchor" href="#id_2026-1-2-1-1"></a></h3>
+<ul><li>Add code.json file and update links, urls, etc in preparation for DGEC migration</li>
+</ul></div>
+<div class="section level3">
+<h3 id="id_2026-1-2-1-2">2026-03-05<a class="anchor" aria-label="anchor" href="#id_2026-1-2-1-2"></a></h3>
+<ul><li>Update <code>set_cross_references</code> function to put more information in additionalMetadata and be more consistent with the way Projects are handled.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="id_2026-1-2-1-3">2026-03-03<a class="anchor" aria-label="anchor" href="#id_2026-1-2-1-3"></a></h3>
+<ul><li>Move ISOcodes from Suggests to Imports</li>
+<li>Add <code>set_cross_references</code> function</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.2.0" id="emleditor-v120">EMLeditor v1.2.0<a class="anchor" aria-label="anchor" href="#emleditor-v120"></a></h2>
+<div class="section level3">
+<h3 id="id_2026-1-2-0">2026-02-26<a class="anchor" aria-label="anchor" href="#id_2026-1-2-0"></a></h3>
+<ul><li>Update author list</li>
+<li>Update DESCRIPTION to new version for API v8</li>
+</ul></div>
+<div class="section level3">
+<h3 id="id_2025-1-2-0">2025-12-31<a class="anchor" aria-label="anchor" href="#id_2025-1-2-0"></a></h3>
+<ul><li>Updated DataStore APIs to hit v8 API instead of now deprecated v7 API endpoints</li>
+</ul></div>
+<div class="section level3">
+<h3 id="id_2025-1-2-0-1">2025-09-15<a class="anchor" aria-label="anchor" href="#id_2025-1-2-0-1"></a></h3>
+<ul><li>Update <code>set_creator_orgs</code> to use current Unit API endpoint (and move away from legacy/discontinued endpoint) ## 2025-07-25</li>
+<li>bugfix for <code>set_data_urls</code> where giving the function a custom url caused it to create invalid metadata.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.1.0" id="emleditor-v110">EMLeditor v1.1.0<a class="anchor" aria-label="anchor" href="#emleditor-v110"></a></h2>
 <div class="section level3">
@@ -457,7 +494,7 @@ and <alternateidentifier> fields were used multiple times in the metadata.</alte
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

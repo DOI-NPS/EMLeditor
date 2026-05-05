@@ -1,0 +1,74 @@
+# Check & set a DOI
+
+`set_doi()` checks to see if there is a DOI in the alternateIdentifier
+tag. The EMLassemblyline package stores data package DOIs in this tag
+(although the official EML schema has the DOI in a different location).
+If there is no DOI in the alternateIdentifier tag, the function adds a
+DOI & reports the new DOI. If there is a DOI, the function reports the
+existing DOI, and prompts the user for input to either retain the
+existing DOI or overwrite it. Reports back the existing or new DOI,
+depending on the user input.
+
+As an alternative, consider using
+[`set_datastore_doi()`](https://doi-nps.github.io/EMLeditor/reference/set_datastore_doi.md),
+which will automatically initiate a draft reference on DataStore and
+inject the corresponding DOI into metadata.
+
+## Usage
+
+``` r
+set_doi(eml_object, ds_ref, force = FALSE, NPS = TRUE)
+```
+
+## Arguments
+
+- eml_object:
+
+  is an EML-formatted R object, either generated in R or imported
+  (typically from an EML-formatted .xml file) using EML::read_eml(,
+  from="xml").
+
+- ds_ref:
+
+  is the same as the 7-digit reference code generated on DataStore when
+  a draft reference is initiated.You should NOT include the full URL,
+  DOI prefix, or anything except the 7-digit DataStore Reference Code.
+
+- force:
+
+  logical. Defaults to false. If set to FALSE, a more interactive
+  version of the function requesting user input and feedback. Setting
+  force = TRUE facilitates scripting.
+
+- NPS:
+
+  Logical. Defaults to TRUE. **Most NPS users should leave this as the
+  default**. Only under specific circumstances should it be set to
+  FALSE: if you are **not** publishing with NPS, if you need to set the
+  publisher location to some place other than the Fort Collins Office
+  (e.g. you are NOT working on a data package) or your product is "for"
+  the NPS but not "by" the NPS and you need to specify a different
+  agency, set NPS = FALSE. When NPS=TRUE, the function will over-write
+  existing publisher info and inject NPS as the publisher along the the
+  Central Office in Fort Collins as the location. Additionally, it sets
+  the "for or by NPS" field to TRUE and specifies the originating agency
+  as NPS.
+
+## Value
+
+an EML-formatted R object
+
+## Details
+
+if `set_doi()` is used to change the DOI, it will also update the urls
+listed in metadata for each data file to reflect the new DOI/DataStore
+reference. If you didn't have links to your data files, `set_doi()` will
+add them - but only if you actually update the doi.
+
+## Examples
+
+``` r
+if (FALSE) { # \dontrun{
+eml_object <- set_doi(eml_object, 1234567)
+} # }
+```

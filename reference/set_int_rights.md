@@ -1,0 +1,76 @@
+# Set Intellectual Rights (and License)
+
+set_int_rights allows the intellectualRights and licenseName fields in
+EML to be surgically replaced.
+
+## Usage
+
+``` r
+set_int_rights(
+  eml_object,
+  license = c("CC0", "public", "restricted"),
+  force = FALSE,
+  NPS = TRUE
+)
+```
+
+## Arguments
+
+- eml_object:
+
+  is an EML-formatted R object, either generated in R or imported
+  (typically from an EML-formatted .xml file) using EML::read_eml(,
+  from="xml").
+
+- license:
+
+  String. Indicates the type of license to be used. The three potential
+  options are "CC0", "public" and "restricted". CC0 and public can only
+  be used if CUI is set to PUBLIC. Restricted can only be used if CUI is
+  set to any code that is NOT set to PUBLIC (see
+  [`set_cui_code()`](https://doi-nps.github.io/EMLeditor/reference/set_cui_code.md)
+  for a list of codes). To view the exact text that will be inserted for
+  each license, please see
+  https://nationalparkservice.github.io/NPS_EML_Script/stepbystep.html#intellectual-rights
+
+- force:
+
+  logical. Defaults to false. If set to FALSE, a more interactive
+  version of the function requesting user input and feedback. Setting
+  force = TRUE facilitates scripting.
+
+- NPS:
+
+  Logical. Defaults to TRUE. **Most NPS users should leave this as the
+  default**. Only under specific circumstances should it be set to
+  FALSE: if you are **not** publishing with NPS, if you need to set the
+  publisher location to some place other than the Fort Collins Office
+  (e.g. you are NOT working on a data package) or your product is "for"
+  the NPS but not "by" the NPS and you need to specify a different
+  agency, set NPS = FALSE. When NPS=TRUE, the function will over-write
+  existing publisher info and inject NPS as the publisher along the the
+  Central Office in Fort Collins as the location. Additionally, it sets
+  the "for or by NPS" field to TRUE and specifies the originating agency
+  as NPS.
+
+## Value
+
+eml_object
+
+## Details
+
+set_int_rights requires that CUI information be listed in
+additionalMetadata prior to being called. The verbose `force = FALSE`
+option will warn the user if there is no CUI specified. `set_int_rights`
+checks to make sure the CUI code specified (see
+[`set_cui_code()`](https://doi-nps.github.io/EMLeditor/reference/set_cui_code.md))
+is appropriate for the license type chosen. For most public NPS
+datasets, the CC0 license is appropriate.
+
+## Examples
+
+``` r
+if (FALSE) { # \dontrun{
+set_int_rights(eml_object, "CC0", force=TRUE, NPS=FALSE)
+set_int_rights(eml_object, "restricted")} # }
+```

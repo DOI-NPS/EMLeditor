@@ -1,0 +1,91 @@
+# Initiates a draft reference and inserts the reserved DOI into metadata
+
+`set_datastore_doi()` differs from
+[`set_doi()`](https://doi-nps.github.io/EMLeditor/reference/set_doi.md)
+in that this function generates a draft reference on DataStore and uses
+that draft reference to auto-populate the DOI within metadata whereas
+the latter requires manually initiating a draft reference in DataStore
+and providing the reference ID to insert the DOI into metadata.
+
+## Usage
+
+``` r
+set_datastore_doi(eml_object, force = FALSE, NPS = TRUE, dev = FALSE)
+```
+
+## Arguments
+
+- eml_object:
+
+  is an R object imported (typically from an EML-formatted .xml file)
+  using EML::read_eml(, from="xml").
+
+- force:
+
+  logical. Defaults to false. If set to FALSE, a more interactive
+  version of the function requesting user input and feedback. Setting
+  force = TRUE facilitates scripting.
+
+- NPS:
+
+  Logical. Defaults to TRUE. **Most users should leave this as the
+  default**. Only under specific circumstances should it be set to
+  FALSE: if you are **not** publishing with NPS, if you need to set the
+  publisher location to some place other than the Fort Collins Office
+  (e.g. you are NOT working on a data package) or your product is "for"
+  the NPS by not "by" the NPS and you need to specify a different
+  agency, set NPS = FALSE. When NPS=TRUE, the function will over-write
+  existing publisher info and inject NPS as the publisher along the the
+  Central Office in Fort Collins as the location. Additionally, it sets
+  the "for or by NPS" field to TRUE and specifies the originating agency
+  as NPS.
+
+- dev:
+
+  Logical. Defaults to FALSE. When dev = TRUE, all api actions are
+  re-routed to the development server (as opposed to when dev = FALSE
+  when api actions will target the production server).
+
+## Value
+
+an EML-formatted R object
+
+## Details
+
+To prevent generating too many (unused) draft references,
+`set_datastore_doi()` checks your metadata contents prior to initiating
+a draft reference on DataStore. If you already have a DOI specified, it
+will ask if you really want to over-write the DOI **and** initiate a new
+draft reference. Setting force = TRUE will over-ride this aspect of the
+function, so use with care. the `set_datastore_doi()` function requires
+that your metadata already contain a data package title and if it is
+missing will prompt you to insert it and quit. Setting force = TRUE will
+not override this check. If R cannot successfully initiate a draft
+reference on DataStore, the function will remind you to log on to the
+VPN. If the problem persists, email <NRSS_DataStore@nps.gov> .
+
+This function generates a draft reference on DataStore. If you run with
+force = FALSE (default), the function will report the draft reference
+URL and the draft title for the draft reference. Make sure you upload
+your data and metadata to the correct draft reference! Your draft
+reference title should read: "DRAFT: ". This will be updated to your
+data package title when you upload your metadata.
+
+If you set a new DOI with `set_datastore_doi()`, it will also update all
+the links within the metadata to the data files to reflect the new draft
+reference and DataStore location. If you didn't have links to your data
+files, `set_datastore_doi()` will add them - but only if you actually
+update the doi.
+
+If you would like to test out the function without making excess
+references on DataStore, set the parameter dev=TRUE. That will re-route
+all of the API requests to the development server. You must be logged in
+to the VPN to access irmadev.
+
+## Examples
+
+``` r
+if (FALSE) { # \dontrun{
+eml_object <- set_datastore_doi(eml_object)
+} # }
+```
