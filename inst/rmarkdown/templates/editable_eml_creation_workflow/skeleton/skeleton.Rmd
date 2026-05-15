@@ -24,7 +24,7 @@ options(download.file.method="wininet")
 ```{r package_install, eval=FALSE}
 #install packages
 install.packages(c("remotes", "tidyverse"))
-remotes::install_github("nationalparkservice/NPSdataverse")
+remotes::install_github("doi-nps/NPSdataverse")
 ```
 ```{r load_packages}
 # When loading packages, you may be advised to update to more recent versions
@@ -106,7 +106,7 @@ data_taxa_fields <- "scientific_Name"
 ```
 
 #### Geographic information
-Specify the tables and fields that contain geographic coordinates and site names. This information will be used to fill out the geographic coverage elements of the metadata. If your data package does not have geographic information skip this step. If the only geographic information you are supplying is the park units (and their bounding boxes) you can also skip this step; Park Units and the corresponding GPS coordinates for their bounding boxes will be added at a later step. If your coordinates are in UTMs and not GPS, try the [`convert_utm_to_ll()`](https://doi-nps.github.io/QCkit/reference/convert_utm_to_ll.html) function in the [QCkit package](https://doi-nps.github.io/QCkit/)
+Specify the tables and fields that contain geographic coordinates and site names. This information will be used to fill out the geographic coverage elements of the metadata. If your data package does not have geographic information skip this step. If the only geographic information you are supplying is the park units (and their bounding boxes) you can also skip this step; Park Units and the corresponding GPS coordinates for their bounding boxes will be added at a later step. If your coordinates are in UTMs and not GPS, try the [`generate_ll_from_utm()`](https://doi-nps.github.io/QCkit/reference/generate_ll_from_utm.html) function in the [QCkit package](https://doi-nps.github.io/QCkit/)
 ```{r geo_info}
 data_coordinates_table <- "qry_Export_AA_points.csv"
 data_latitude <- "decimalLatitude"
