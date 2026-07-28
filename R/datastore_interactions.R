@@ -161,28 +161,6 @@ set_datastore_doi <- function(eml_object,
                               tag = tag,
                               force = force,
                               NPS = NPS)
-
-
-  # data_table <- EML::eml_get(eml_object, "dataTable")
-  # data_table <- within(data_table, rm("@context"))
-  # if(dev == TRUE){
-  #   data_url <- paste0("https://irmadev.nps.gov/DataStore/Reference/Profile/",
-  #                      ds_ref)
-  # } else {
-  #   data_url <- paste0("https://irma.nps.gov/DataStore/Reference/Profile/",
-  #                    ds_ref)
-  # }
-  # # handle case when there is only one data table:
-  # if("physical" %in% names(data_table)){
-  #   eml_object$dataset$dataTable$physical$distribution$online$url <- data_url
-  # }
-  # # handle case when there is only one data table:
-  # else {
-  #   for(i in seq_along(data_table)){
-  #     eml_object$dataset$dataTable[[i]]$physical$distribution$online$url <-
-  #       data_url
-  #   }
-  # }
   if(force == FALSE){
     #print DOI to screen
     doc1 <- eml_object$dataset$alternateIdentifier
