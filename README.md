@@ -1,10 +1,11 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+
 <!-- badges: start -->
 
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
-[![R-CMD-check](https://github.com/doi-nps/EMLeditor/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/doi-nps/EMLeditor/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/DOI-NPS/EMLeditor/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/DOI-NPS/EMLeditor/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 # EMLeditor
@@ -32,8 +33,8 @@ remotes::install_github("doi-nps/eMLeditor")
 ```
 
 To install all the packages in the
-[NPSdataverse](https://github.com/doi-nps/NPSdataverse)
-(including EMLeditor):
+[NPSdataverse](https://github.com/doi-nps/NPSdataverse) (including
+EMLeditor):
 
 ``` r
 pak::pkg_install("doi-nps/NPSdataverse")
@@ -47,21 +48,21 @@ EMLeditor comes with a template Rmarkdown script that you can edit to
 generate a fully fledged EML document. The script includes and
 accompanying documentation includes information to:
 
-1)  Generate an initial EML document using the R/EMLassemblyline
-    package functions
+1)  Generate an initial EML document using the R/EMLassemblyline package
+    functions
 2)  Add NPS specific and DataStore specific EML elements using the
     R/EMLeditor package functions
-3)  Generate a draft data package reference on DataStore and
-    incorporate DOIs into the metadata
+3)  Generate a draft data package reference on DataStore and incorporate
+    DOIs into the metadata
 4)  Check the EML document to make sure it is schema-valid and passes
     all the necessary tests for uploading to DataStore (using the
     `run_congruence_checks()` function from the
-    [DPchecker](https://doi-nps.github.io/DPchecker/)
-    package)
+    [DPchecker](https://doi-nps.github.io/DPchecker/) package)
 5)  Upload a completed data package to DataStore
 
 Please *DO NOT ACTIVATE* the DataStore reference: prior to activation,
-data packages need to be reviewed. Use the [Data Package Review Checklist](https://irma.nps.gov/DataStore/Reference/Profile/2306391?Inv=TRUE)
+data packages need to be reviewed. Use the [Data Package Review
+Checklist](https://irma.nps.gov/DataStore/Reference/Profile/2306391?Inv=TRUE)
 to complete the review.
 
 ## Accessing the EML creation script
@@ -78,8 +79,8 @@ template,”Editable_EML_Creation_Workflow {EMLeditor}” then click “OK”.
 If you use EMLeditor functions to alter your metadata (e.g. “set” class
 functions) they will also silently add the National Park Service as a
 publisher (including location, [ROR id](https://ror.org/), etc) to your
-metadata unless you set `NPS=FALSE`. If you leave the default setting as
-`NPS=TRUE`, EMLeditor will also assume the data package is being created
+metadata unless you set NPS=FALSE. If you leave the default setting as
+NPS=TRUE, EMLeditor will also assume the data package is being created
 “by or for the NPS” and add that information to the metadata.
 
 EMLeditor will also add information about the version of EMLeditor you
