@@ -38,7 +38,7 @@ To install all the packages in the
 ``` r
 pak::pkg_install("doi-nps/NPSdataverse")
 #alternatively:
-remotes::install_github("doi-nps/NPSdataverse)
+remotes::install_github("doi-nps/NPSdataverse"")
 ```
 
 ## Workflow outline
@@ -61,7 +61,7 @@ accompanying documentation includes information on:
 5)  Uploading a completed data package to DataStore
 
 Please *DO NOT ACTIVATE* the DataStore reference: prior to activation,
-data packages need to be reviewed via a yet-to-be-created process.
+data packages need to be reviewed. Use 
 
 ## Accessing the EML creation script
 
