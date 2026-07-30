@@ -77,13 +77,19 @@ set_title <- function(eml_object,
 #'
 #' @param ds_ref is the same as the 7-digit reference code generated on DataStore when a draft reference is initiated.You should NOT include the full URL, DOI prefix, or anything except the 7-digit DataStore Reference Code.
 #'
+#' @param tag a string. Must take the values of either "information" or "download". Defines the nature of the url being set. For direct download links use "download". For anything else, use "information". Defaults to "information" as this is the value that should be used for all DataStore urls.
+#'
 #' @returns an EML-formatted R object
 #' @export
 #' @examples
 #' \dontrun{
 #' eml_object <- set_doi(eml_object, 1234567)
 #' }
-set_doi <- function(eml_object, ds_ref, force = FALSE, NPS = TRUE) {
+set_doi <- function(eml_object,
+                    ds_ref,
+                    tag = "information",
+                    force = FALSE,
+                    NPS = TRUE) {
   # scripting route:
   if (force == TRUE) {
     eml_object$dataset$alternateIdentifier <- paste0(
@@ -127,6 +133,7 @@ set_doi <- function(eml_object, ds_ref, force = FALSE, NPS = TRUE) {
         # print the existing DOI to the screen:
         doi <- sub(".*? ", "", doi)
         cat("Your DOI remains: ", crayon::blue$bold(doi), sep = "")
+        return(invisible(eml_object))
       }
       # if User opts to change DOI, change it:
       if (var1 == 1) {
@@ -143,24 +150,15 @@ set_doi <- function(eml_object, ds_ref, force = FALSE, NPS = TRUE) {
     }
   }
   # update data URLs to correspond to new DOI
-  # (this should probably be a separate function)
-  data_table <- EML::eml_get(eml_object, "dataTable")
-  data_table <- within(data_table, rm("@context"))
+  data_url <- paste0("https://irmadev.nps.gov/DataStore/Reference/Profile/",
+                       ds_ref)
 
-  data_url <- paste0("https://irma.nps.gov/DataStore/Reference/Profile/",
-                     ds_ref)
-  #handle case when there is only one data table:
-  if("physical" %in% names(data_table)){
-    eml_object$dataset$dataTable$physical$distribution$online$url <-
-      data_url
-  }
-  # handle case when there are multiple data tables:
-  else {
-    for(i in seq_along(data_table)){
-      eml_object$dataset$dataTable[[i]]$physical$distribution$online$url <-
-        data_url
-    }
-  }
+  eml_object <- set_data_urls(eml_object = eml_object,
+                              url = data_url,
+                              tag = tag,
+                              force = force,
+                              NPS = NPS)
+
   if (force == FALSE) {
     cat("Your data files url also been updated to: ",
         crayon::blue$bold(data_url), ".\n", sep = "")

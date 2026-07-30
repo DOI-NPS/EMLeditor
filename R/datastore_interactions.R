@@ -14,6 +14,8 @@
 #'
 #' @param force logical. Defaults to false. If set to FALSE, a more interactive version of the function requesting user input and feedback. Setting force = TRUE facilitates scripting.
 #'
+#' @param tag a string. Must take the values of either "information" or "download". Defines the nature of the url being set. For direct download links use "download". For anything else, use "information". Defaults to "information" as this is the value that should be used for all DataStore urls.
+#'
 #' @param NPS Logical. Defaults to TRUE. **Most users should leave this as the default**. Only under specific circumstances should it be set to FALSE: if you are **not** publishing with NPS, if you need to set the publisher location to some place other than the Fort Collins Office (e.g. you are NOT working on a data package) or your product is "for" the NPS by not "by" the NPS and you need to specify a different agency, set NPS = FALSE. When NPS=TRUE, the function will over-write existing publisher info and inject NPS as the publisher along the the Central Office in Fort Collins as the location. Additionally, it sets the "for or by NPS" field to TRUE and specifies the originating agency as NPS.
 #'
 #' @param dev Logical. Defaults to FALSE. When dev = TRUE, all api actions are re-routed to the development server (as opposed to when dev = FALSE when api actions will target the production server).
@@ -27,6 +29,7 @@
 #' eml_object <- set_datastore_doi(eml_object)
 #' }
 set_datastore_doi <- function(eml_object,
+                              tag = "information",
                               force = FALSE,
                               NPS = TRUE,
                               dev = FALSE){
@@ -146,26 +149,18 @@ set_datastore_doi <- function(eml_object,
     ds_ref)
   }
   # update data URLs to correspond to new DOI:
-  data_table <- EML::eml_get(eml_object, "dataTable")
-  data_table <- within(data_table, rm("@context"))
   if(dev == TRUE){
-    data_url <- paste0("https://irmadev.nps.gov/DataStore/Reference/Profile/",
-                       ds_ref)
-  } else {
-    data_url <- paste0("https://irma.nps.gov/DataStore/Reference/Profile/",
-                     ds_ref)
-  }
-  # handle case when there is only one data table:
-  if("physical" %in% names(data_table)){
-    eml_object$dataset$dataTable$physical$distribution$online$url <- data_url
-  }
-  # handle case when there is only one data table:
-  else {
-    for(i in seq_along(data_table)){
-      eml_object$dataset$dataTable[[i]]$physical$distribution$online$url <-
-        data_url
-    }
-  }
+       data_url <- paste0("https://irmadev.nps.gov/DataStore/Reference/Profile/",
+                          ds_ref)
+     } else {
+       data_url <- paste0("https://irma.nps.gov/DataStore/Reference/Profile/",
+                        ds_ref)
+     }
+  eml_object <- set_data_urls(eml_object = eml_object,
+                              url = data_url,
+                              tag = tag,
+                              force = force,
+                              NPS = NPS)
   if(force == FALSE){
     #print DOI to screen
     doc1 <- eml_object$dataset$alternateIdentifier

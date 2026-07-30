@@ -4,10 +4,18 @@
 \alias{set_datastore_doi}
 \title{Initiates a draft reference and inserts the reserved DOI into metadata}
 \usage{
-set_datastore_doi(eml_object, force = FALSE, NPS = TRUE, dev = FALSE)
+set_datastore_doi(
+  eml_object,
+  tag = "information",
+  force = FALSE,
+  NPS = TRUE,
+  dev = FALSE
+)
 }
 \arguments{
 \item{eml_object}{is an R object imported (typically from an EML-formatted .xml file) using EML::read_eml(\if{html}{\out{<filename>}}, from="xml").}
+
+\item{tag}{a string. Must take the values of either "information" or "download". Defines the nature of the url being set. For direct download links use "download". For anything else, use "information". Defaults to "information" as this is the value that should be used for all DataStore urls.}
 
 \item{force}{logical. Defaults to false. If set to FALSE, a more interactive version of the function requesting user input and feedback. Setting force = TRUE facilitates scripting.}
 

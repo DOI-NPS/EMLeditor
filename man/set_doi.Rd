@@ -4,12 +4,14 @@
 \alias{set_doi}
 \title{Check & set a DOI}
 \usage{
-set_doi(eml_object, ds_ref, force = FALSE, NPS = TRUE)
+set_doi(eml_object, ds_ref, tag = "information", force = FALSE, NPS = TRUE)
 }
 \arguments{
 \item{eml_object}{is an EML-formatted R object, either generated in R or imported (typically from an EML-formatted .xml file) using EML::read_eml(\if{html}{\out{<filename>}}, from="xml").}
 
 \item{ds_ref}{is the same as the 7-digit reference code generated on DataStore when a draft reference is initiated.You should NOT include the full URL, DOI prefix, or anything except the 7-digit DataStore Reference Code.}
+
+\item{tag}{a string. Must take the values of either "information" or "download". Defines the nature of the url being set. For direct download links use "download". For anything else, use "information". Defaults to "information" as this is the value that should be used for all DataStore urls.}
 
 \item{force}{logical. Defaults to false. If set to FALSE, a more interactive version of the function requesting user input and feedback. Setting force = TRUE facilitates scripting.}
 
