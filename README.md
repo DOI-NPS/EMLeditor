@@ -39,7 +39,7 @@ EMLeditor):
 ``` r
 pak::pkg_install("doi-nps/NPSdataverse")
 #alternatively:
-remotes::install_github("doi-nps/NPSdataverse"")
+remotes::install_github("doi-nps/NPSdataverse")
 ```
 
 ## Workflow outline
