@@ -47,7 +47,7 @@ To install all the packages in the
 ``` r
 pak::pkg_install("doi-nps/NPSdataverse")
 #alternatively:
-remotes::install_github("doi-nps/NPSdataverse"")
+remotes::install_github("doi-nps/NPSdataverse")
 ```
 
 ## Workflow outline
