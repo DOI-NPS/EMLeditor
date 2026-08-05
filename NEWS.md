@@ -1,4 +1,8 @@
 # EMLeditor v1.2.1 (Development version)
+
+## 2026-08-05
+  * Update DESCRIPTION: move sf from Suggests to Imports. Hopefully fixes issues with `set_content_units` etc.
+  
 ## 2026-07-09
   * Update `set_datastore_doi()` to include information or download tags in the data table URL by calling `set_data_urls()`
   * Update  `set_doi()` to including information or download tag in the data table URL by calling `set_data_urls()`

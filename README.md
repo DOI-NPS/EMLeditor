@@ -1,10 +1,11 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+
 <!-- badges: start -->
 
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
-[![R-CMD-check](https://github.com/doi-nps/EMLeditor/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/doi-nps/EMLeditor/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/DOI-NPS/EMLeditor/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/DOI-NPS/EMLeditor/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 # EMLeditor
@@ -32,36 +33,37 @@ remotes::install_github("doi-nps/eMLeditor")
 ```
 
 To install all the packages in the
-[NPSdataverse](https://github.com/doi-nps/NPSdataverse)
-(including EMLeditor):
+[NPSdataverse](https://github.com/doi-nps/NPSdataverse) (including
+EMLeditor):
 
 ``` r
 pak::pkg_install("doi-nps/NPSdataverse")
 #alternatively:
-remotes::install_github("doi-nps/NPSdataverse)
+remotes::install_github("doi-nps/NPSdataverse")
 ```
 
 ## Workflow outline
 
 EMLeditor comes with a template Rmarkdown script that you can edit to
 generate a fully fledged EML document. The script includes and
-accompanying documentation includes information on:
+accompanying documentation includes information to:
 
-1)  Generating an initial EML document using the R/EMLassemblyline
-    package functions
-2)  Adding in NPS specific and DataStore specific EML elements using the
+1)  Generate an initial EML document using the R/EMLassemblyline package
+    functions
+2)  Add NPS specific and DataStore specific EML elements using the
     R/EMLeditor package functions
-3)  Generating a draft data package reference on DataStore and
-    incorporating DOIs into the metadata
-4)  Checking the EML document to make sure it is schema-valid and passes
+3)  Generate a draft data package reference on DataStore and incorporate
+    DOIs into the metadata
+4)  Check the EML document to make sure it is schema-valid and passes
     all the necessary tests for uploading to DataStore (using the
     `run_congruence_checks()` function from the
-    [DPchecker](https://doi-nps.github.io/DPchecker/)
-    package)
-5)  Uploading a completed data package to DataStore
+    [DPchecker](https://doi-nps.github.io/DPchecker/) package)
+5)  Upload a completed data package to DataStore
 
 Please *DO NOT ACTIVATE* the DataStore reference: prior to activation,
-data packages need to be reviewed via a yet-to-be-created process.
+data packages need to be reviewed. Use the [Data Package Review
+Checklist](https://irma.nps.gov/DataStore/Reference/Profile/2306391?Inv=TRUE)
+to complete the review.
 
 ## Accessing the EML creation script
 
@@ -82,5 +84,4 @@ NPS=TRUE, EMLeditor will also assume the data package is being created
 “by or for the NPS” and add that information to the metadata.
 
 EMLeditor will also add information about the version of EMLeditor you
-used to edit your metadata (for instance if you used “set” class
-functions).
+used to edit your metadata when you use “set” class functions.
