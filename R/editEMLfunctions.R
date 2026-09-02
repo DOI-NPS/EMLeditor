@@ -1768,7 +1768,7 @@ set_cross_reference <- function(eml_object,
     get_url <- if (dev) {
       paste0(.ds_dev_api(), "ReferenceCodeSearch?q=", cross_ref_id[i])
     } else {
-      paste0(.ds_api(),     "ReferenceCodeSearch?q=", cross_ref_id[i])
+      paste0(.ds_secure_api(),     "ReferenceCodeSearch?q=", cross_ref_id[i])
     }
 
     req2 <- httr::GET(get_url,
