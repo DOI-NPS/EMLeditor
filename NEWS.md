@@ -1,4 +1,6 @@
 # EMLeditor v1.2.1 (Development version)
+## 2026-09-02
+  * Bug fix for `set_cross_references`. Make sure cross reference URL is added to metadata!
 
 ## 2026-08-05
   * Update DESCRIPTION: move sf from Suggests to Imports. Hopefully fixes issues with `set_content_units` etc.
