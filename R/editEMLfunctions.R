@@ -1768,7 +1768,7 @@ set_cross_reference <- function(eml_object,
     get_url <- if (dev) {
       paste0(.ds_dev_api(), "ReferenceCodeSearch?q=", cross_ref_id[i])
     } else {
-      paste0(.ds_api(),     "ReferenceCodeSearch?q=", cross_ref_id[i])
+      paste0(.ds_secure_api(),     "ReferenceCodeSearch?q=", cross_ref_id[i])
     }
 
     req2 <- httr::GET(get_url,
@@ -1782,7 +1782,7 @@ set_cross_reference <- function(eml_object,
       cli::cli_abort(c("x" = msg))
       return(invisible())
       }
-    #get project information:
+    #get cross ref information:
     rjson2 <- jsonlite::fromJSON(httr::content(req2, "text"))
 
     if (rjson2$isDOI == "True") {
@@ -1792,10 +1792,7 @@ set_cross_reference <- function(eml_object,
       }
     cross_ref_type[i]  <- rjson2$referenceType
     cross_ref_title[i] <- rjson2$title
-
-    #cross_ref_url <- append(cross_ref_url, cross_url)
-    #cross_ref_type <- append(cross_ref_type, cross_type)
-    #cross_ref_title <- append(cross_ref_title, cross_title)
+    cross_ref_url[i] <- stringr::str_trim(cross_url)
   }
 
   build_cross_ref_items <- function(urls, titles, types) {
