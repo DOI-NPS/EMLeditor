@@ -167,13 +167,15 @@ test_that("set_content_units returns null for invalid park unit", {
 
 test_that("set_cui_code returns valid EML", {
   cui <- "NOCON"
-  new_meta <- set_cui_code(BICY_EMLed_meta, cui_code = cui, force = TRUE)
+  new_meta <- suppressWarnings(
+    set_cui_code(BICY_EMLed_meta, cui_code = cui, force = TRUE))
   expect_equal(EML::eml_validate(new_meta)[1], TRUE)
 })
 
 test_that("set_cui_code updates CUI code in EML", {
   cui <- "NOCON"
-  new_meta <- set_cui_code(BICY_EMLed_meta, cui_code = cui, force = TRUE)
+  new_meta <- suppressWarnings(
+    set_cui_code(BICY_EMLed_meta, cui_code = cui, force = TRUE))
   x <- get_cui_code(new_meta)
   expect_equal(x, "Contains  CUI. Federal, state, local, or tribal employees may have access, but contractors cannot.")
 })
@@ -182,7 +184,8 @@ test_that("set_cui_code updates when requested", {
   return_val_1 <- function() {1}
   local({mockr::local_mock(.get_user_input = return_val_1)
      cui <- "NOCON"
-     new_meta <- set_cui_code(BICY_EMLed_meta, cui_code = cui, force = FALSE)
+     new_meta <- suppressWarnings(
+       set_cui_code(BICY_EMLed_meta, cui_code = cui, force = FALSE))
      x <- get_cui_code(new_meta)
      expect_equal(x,
                   "Contains  CUI. Federal, state, local, or tribal employees may have access, but contractors cannot.")
@@ -193,7 +196,8 @@ test_that("set_cui_code does not update when requested not to", {
   return_val_2 <- function() {2}
   local({mockr::local_mock(.get_user_input = return_val_2)
     cui <- "NOCON"
-    new_meta <- set_cui_code(BICY_EMLed_meta, cui_code = cui, force = FALSE)
+    new_meta <- suppressWarnings(
+      set_cui_code(BICY_EMLed_meta, cui_code = cui, force = FALSE))
     x <- get_cui_code(new_meta)
     expect_equal(x,
                  "Does NOT contain CUI. The original data contained CUI, but in this data package CUI have been obscured so that it no longer contains CUI."
@@ -260,26 +264,24 @@ test_that("set_cui does not update when requested not to", {
 test_that("set_cui_marking returns valid EML", {
   marking <- "PUBLIC"
   code <- "PUBLIC"
-  new_meta <- set_cui_code(BICY_EMLed_meta,
+  new_meta <- suppressWarnings(set_cui_code(BICY_EMLed_meta,
                            cui_code = code,
-                           force = TRUE)
-  new_meta2 <- set_cui_marking(new_meta,
-                               cui_marking = marking,
-                               force = TRUE)
+                           force = TRUE))
   expect_equal(EML::eml_validate(new_meta)[1], TRUE)
 })
 
 test_that("set_cui_marking adds CUI marking to EML", {
   code <- "PUBLIC"
   marking <- "PUBLIC"
-  new_meta <- (set_cui_code(BICY_EMLed_meta,
+  new_meta <- (suppressWarnings(set_cui_code(BICY_EMLed_meta,
                             cui_code = code,
-                            force = TRUE))
-  new_meta2 <- set_cui_marking(new_meta,
+                            force = TRUE)))
+  new_meta2 <- suppressWarnings(set_cui_marking(new_meta,
                                cui_marking = marking,
-                               force = TRUE)
+                               force = TRUE))
   new_marking <- get_cui_marking(new_meta2)
-  expect_equal(new_marking, "Your CUI marking is set to PUBLIC. This means the data do not contain CUI.")
+  expect_equal(new_marking, paste0("Your CUI marking is set to PUBLIC. This ",
+                                   "means the data do not contain CUI."))
 })
 
 test_that("set_cui_marking updates CUI marking interactively", {
@@ -289,20 +291,22 @@ test_that("set_cui_marking updates CUI marking interactively", {
   marking2 <- "SP-HISTP"
   return_val_1 <- function() {1}
   local({mockr::local_mock(.get_user_input = return_val_1)
-  new_meta <- (set_cui_code(BICY_EMLed_meta,
+  new_meta <- (suppressWarnings(set_cui_code(BICY_EMLed_meta,
                             cui_code = code,
-                            force = TRUE))
-  new_meta2 <- set_cui_marking(new_meta,
+                            force = TRUE)))
+  new_meta2 <- suppressWarnings(set_cui_marking(new_meta,
                                cui_marking = marking,
-                               force = FALSE)
-  new_meta3 <- (set_cui_code(new_meta2,
+                               force = FALSE))
+  new_meta3 <- suppressWarnings(set_cui_code(new_meta2,
                             cui_code = code2,
                             force = TRUE))
-  new_meta4 <- set_cui_marking(new_meta3,
+  new_meta4 <- suppressWarnings(set_cui_marking(new_meta3,
                                cui_marking = marking2,
-                               force = FALSE)
+                               force = FALSE))
   x <- get_cui_marking(new_meta4)
-  expect_equal(x, "Your CUI marking is set to SP-HISTP. This means the CUI in the data is related to the location character, or ownership of historic property.")
+  expect_equal(x, paste0("Your CUI marking is set to SP-HISTP. This means ",
+                         "the CUI in the data is related to the location ",
+                         "character, or ownership of historic property."))
   })
 })
 
@@ -314,37 +318,64 @@ test_that("set_cui_marking does not update CUI marking when asked not to",
   marking2 <- "SP-HISTP"
   return_val_2 <- function() {2}
   local({mockr::local_mock(.get_user_input = return_val_2)
-    new_meta <- (set_cui_code(BICY_EMLed_meta,
+    new_meta <- suppressWarnings(set_cui_code(BICY_EMLed_meta,
                               cui_code = code,
                               force = TRUE))
-    new_meta2 <- set_cui_marking(new_meta,
+    new_meta2 <- suppressWarnings(set_cui_marking(new_meta,
                                  cui_marking = marking,
-                                 force = FALSE)
-    new_meta3 <- (set_cui_code(new_meta2,
+                                 force = FALSE))
+    new_meta3 <- suppressWarnings(set_cui_code(new_meta2,
                                cui_code = code2,
                                force = TRUE))
-    new_meta4 <- set_cui_marking(new_meta3,
+    new_meta4 <- suppressWarnings(set_cui_marking(new_meta3,
                                  cui_marking = marking2,
-                                 force = FALSE)
+                                 force = FALSE))
     x <- get_cui_marking(new_meta4)
-    expect_equal(x, "Your CUI marking is set to PUBLIC. This means the data do not contain CUI.")
+    expect_equal(x, paste0("Your CUI marking is set to PUBLIC. This means ",
+                           "the data do not contain CUI."))
   })
 })
 
 test_that("set_cui_marking doesn't update with identical informatin", {
   code <- "PUBLIC"
   marking <- "PUBLIC"
-  new_meta <- (set_cui_code(BICY_EMLed_meta,
+  new_meta <- suppressWarnings(set_cui_code(BICY_EMLed_meta,
                             cui_code = code,
                             force = TRUE))
-  new_meta2 <- set_cui_marking(new_meta,
+  new_meta2 <- suppressWarnings(set_cui_marking(new_meta,
                                cui_marking = marking,
-                               force = TRUE)
-  new_meta2 <- set_cui_marking(new_meta,
+                               force = TRUE))
+  new_meta2 <- suppressWarnings(set_cui_marking(new_meta,
                                cui_marking = marking,
-                               force = FALSE)
+                               force = FALSE))
   x <- get_cui_marking(new_meta2)
-  expect_equal(x, "Your CUI marking is set to PUBLIC. This means the data do not contain CUI.")
+  expect_equal(x, paste0("Your CUI marking is set to PUBLIC. This means the ",
+                         "data do not contain CUI."))
+})
+
+# ----- test set_permissions -----
+
+test_that("set_permissions does not accept invalid input for access", {
+  expect_error(new_meta <- set_permissions(BICY_EMLed_meta,
+                              access = "SENSITIVE"))
+})
+
+test_that("set_permisssions does not update when requested not to", {
+  return_val_2 <- function() {2}
+  local({mockr::local_mock(.get_user_input = return_val_2)
+    new_meta <- set_permissions(BICY_EMLed_meta, "PUBLIC")
+    expect_equal(suppressWarnings(get_cui(BICY_EMLed_meta)),
+                 suppressWarnings(get_cui(new_meta)))
+  })
+})
+
+test_that("set_permissions updates when requested to, public", {
+  return_val_1 <- function() {1}
+  local({mockr::local_mock(.get_user_input = return_val_1)
+        new_meta <- set_permissions(BICY_EMLed_meta, "PUBLIC")
+        expect_equal(new_meta[["additionalMetadata"]][[4]][["metadata"]]
+                     [["distribution"]][["access_level"]], "PUBLIC")
+  })
 })
 
 # ----- test set_drr -----

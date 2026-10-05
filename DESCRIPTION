@@ -1,6 +1,6 @@
 Package: EMLeditor
 Title: View and Edit EML Metadata
-Version: 1.2.0
+Version: 1.3.0
 Authors@R: c(
     person(given="Robert", family="Baker", email="robert_baker@nps.gov",
            role = c("aut", "cre"),
@@ -20,7 +20,8 @@ BugReports: https://github.com/doi-NPS/EMLeditor/issues
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 Remotes: 
-    doi-NPS/QCkit
+    github::doi-nps/QCkit,
+    github::doi-nps/NPSdatastore
 Imports: 
     httr,
     readr,
@@ -43,7 +44,8 @@ Imports:
     mockr,
     rlang,
     ISOcodes,
-    sf
+    sf,
+    NPSdatastore
 Suggests:
     stargazer,
     knitr,

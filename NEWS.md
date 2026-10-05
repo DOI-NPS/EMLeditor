@@ -1,4 +1,14 @@
-# EMLeditor v1.2.1 (Development version)
+# EMLeditor v1.3.0 ("Angel's Landing")
+## 2026-09-23
+  * New release v1.3.0, "Angel's Landing"
+  * Deprecated `set_cui`, `set_cui_marking` and `set_cui_code` in favor of `set_permissions`
+  * Add helper function `.build_access` in utils.R; incorporate `.build_access` into `set_permissions` to add an informative block to the access element in EML.
+  * Update get_title to explicitly get the dataset title, not just the first title.
+  
+## 2026-09-22
+  * Bug fix for `set_int_rights` when force == TRUE
+  * Bug fix for `set_permissions` when force == TRUE
+
 ## 2026-09-02
   * Bug fix for `set_cross_references`. Make sure cross reference URL is added to metadata!
 

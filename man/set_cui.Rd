@@ -29,7 +29,7 @@ PUBLIC - Does NOT contain CUI.}
 an EML-formatted R object
 }
 \description{
-#' \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 set_cui adds CUI dissemination codes to EML metadata
 }
 \details{

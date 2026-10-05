@@ -453,34 +453,29 @@ elements and fields. For instance, unit connections, DOIs, referencing a
 DRR, etc. More information about these functions can be found at:
 <https://doi-nps.github.io/EMLeditor/>.
 
-## Add Controlled Unclassified Information (CUI) codes
+## Add file access permissions and justifications
+This is a required step. It is important to indicate not only that your data 
+package contains CUI, but also to inform users if your data package does NOT
+contain CUI because empty fields can be ambiguous (does it not contain CUI or
+did the creators just miss that step?). 
 
-This is a required step, using the function `set_cui_code()`. It is
-important to indicate not only that your data package contains CUI, but
-also to inform users if your data package does NOT contain CUI because
-empty fields can be ambiguous (does it not contain CUI ordid the
-creators just miss that step?). You can choose from one of five CUI
-dissemination codes. Watch out for the spaces! These are:
+You can choose from one of three file restriction levels: "PUBLIC", "INTERNAL" or "RESTRICTED" where internal will require NPS network or VPN to access and "RESTRICTED" will be restricted to a named list of individuals. It is not expected that many data packages will be "RESTRICTED" and RESTRICTED data packages may need additional information in added via the web interface (such as who can download the files).
 
--   PUBLIC - Does NOT contain CUI.
--   FED ONLY - Contains CUI. Only federal employees should have access
-    (similar to "internal only" in DataStore).
--   FEDCON - Contains CUI. Only federal employees and federal
-    contractors should have access (also very much like current
-    "internal only" setting in DataStore).
--   DL ONLY - Contains CUI. Should only be available to a named list of
-    individuals (where and how to list those individuals TBD)
--   NOCON - Contains CUI. Federal, state, local, or tribal employees may
-    have access, but contractors cannot. More information about these
-    codes can be found at:
-    <https://www.archives.gov/cui/registry/limited-dissemination>
+You must also select a justification for choosing INTERNAL or RESTRICTED. These are codes from 1-32 (inclusive). The full list of codes and their justifications can be accessed using `NPSdatastore::get_legal_authority`
 
-```{r cui_dissemination, eval=FALSE}
-my_metadata <- EMLeditor::set_cui_code(my_metadata, "PUBLIC")
-# note that in this case I have added the CUI code to the original R object, 
-# "my_metadata" but by giving it a new name, i.e. "my_meta2" I could have
-# created a new R object. Sometimes creating a new R object is preferable 
-# because if you make a mistake you don't need to start over again.
+If you choose INTERNAL or RESTRICTED you must also supply a contact email address for people who want to request access (we suggest a group email rather than in individual person's email due to frequent personnel turnover) and a specific person's name who is responsible for making the decision to restrict the file downloads.
+
+```{r dessemination permissions, eval = FALSE}
+# For public references:
+my_metadata <- EMLeditor::set_permissions(my_metadata, "PUBLIC")
+
+# For Internal references. Make sure you have selected the correct legal_authority_id!
+my_metadata <- EMLeditor::set_permissions(my_metadata, 
+                                          access = "INTERNAL",
+                                          legal_authority_id = 1,
+                                          contact_email = "network_email@nps.gov",
+                                          authority_designator = "Edward Abbey")
+
 ```
 
 ## Intellectual Rights
@@ -489,13 +484,12 @@ EMLassemblyine and ezEML provide some attractive boilerplate for
 setting the intellectual rights. It looks reasonable and so is easy to
 just keep. However, NPS has some specific regulations about what can and
 cannot be in the intellectualRights tag. Use `set_int_rights()` to
-replace the text with NPS-approved text. Note: You must first add the
-CUI dissemination code using `set_cui()` as the dissemination code and
-license must agree. That is, you cannot give a data package with a
-PUBLIC dissemination code a "restricted" license (and vise versa: a
-restricted data package that contains CUI cannot have a public domain or
-CC0 license). You can choose from one of three options, but **for most
-public NPS data packages, the CC0 license is appropriate**:
+replace the text with NPS-approved text. Note: You must first set the data 
+package permissions with `set_permissions()` above, as the access permissions 
+and license must agree. That is, you cannot give a data package with a PUBLIC dissemination code a "restricted" license (and vice versa: an INTERNAL data 
+package that contains CUI cannot have a public domain or CC0 license). You can
+choose from one of three options, but **for most public NPS data packages, the
+CC0 license is appropriate**:
 
 -   "CC0": This is the default license for all public NPS data packages:
     **"The person who associated a work with this deed has dedicated the 
@@ -574,7 +568,7 @@ my_metadata <- EMLeditor::set_drr(my_metadata, 7654321, "DRR Title")
 This is the human language (as opposed to computer language) that the
 data package and metadata are constructed in. Examples include English,
 Spanish, Navajo, etc. A full list of available languages is available
-from the Libraryof Congress. Please use the "English Name of Language"
+from the Library of Congress. Please use the "English Name of Language"
 as an input. The function will then convert your input to the
 appropriate 3-character ISO 639-2 code.Available languages:
 <https://www.loc.gov/standards/iso639-2/php/code_list.php>

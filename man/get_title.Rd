@@ -15,9 +15,6 @@ a text string
 \description{
 get_title returns a text string that is the title of the data package
 }
-\details{
-accesses all of the \if{html}{\out{<title>}} tags (there can be several, if each file was given a separate title). Assumes that the first instance of \if{html}{\out{<title>}} referes to the entire data package and returns it as a text string, ignoring the contents of all other \if{html}{\out{<title>}} tags.
-}
 \examples{
 \dontrun{
 get_title(eml_object)

@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">EMLeditor</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -458,35 +458,38 @@ not attempt to edit it by hand.</p>
 elements and fields. For instance, unit connections, DOIs, referencing a
 DRR, etc. More information about these functions can be found at: <a href="https://doi-nps.github.io/EMLeditor/" class="uri">https://doi-nps.github.io/EMLeditor/</a>.</p>
 <div class="section level3">
-<h3 id="add-controlled-unclassified-information-cui-codes">Add Controlled Unclassified Information (CUI) codes<a class="anchor" aria-label="anchor" href="#add-controlled-unclassified-information-cui-codes"></a>
+<h3 id="add-file-access-permissions-and-justifications">Add file access permissions and justifications<a class="anchor" aria-label="anchor" href="#add-file-access-permissions-and-justifications"></a>
 </h3>
-<p>This is a required step, using the function
-<code><a href="../reference/set_cui_code.html">set_cui_code()</a></code>. It is important to indicate not only that
+<p>This is a required step. It is important to indicate not only that
 your data package contains CUI, but also to inform users if your data
 package does NOT contain CUI because empty fields can be ambiguous (does
-it not contain CUI ordid the creators just miss that step?). You can
-choose from one of five CUI dissemination codes. Watch out for the
-spaces! These are:</p>
-<ul>
-<li>PUBLIC - Does NOT contain CUI.</li>
-<li>FED ONLY - Contains CUI. Only federal employees should have access
-(similar to “internal only” in DataStore).</li>
-<li>FEDCON - Contains CUI. Only federal employees and federal
-contractors should have access (also very much like current “internal
-only” setting in DataStore).</li>
-<li>DL ONLY - Contains CUI. Should only be available to a named list of
-individuals (where and how to list those individuals TBD)</li>
-<li>NOCON - Contains CUI. Federal, state, local, or tribal employees may
-have access, but contractors cannot. More information about these codes
-can be found at: <a href="https://www.archives.gov/cui/registry/limited-dissemination" class="external-link uri">https://www.archives.gov/cui/registry/limited-dissemination</a>
-</li>
-</ul>
+it not contain CUI or did the creators just miss that step?).</p>
+<p>You can choose from one of three file restriction levels: “PUBLIC”,
+“INTERNAL” or “RESTRICTED” where internal will require NPS network or
+VPN to access and “RESTRICTED” will be restricted to a named list of
+individuals. It is not expected that many data packages will be
+“RESTRICTED” and RESTRICTED data packages may need additional
+information in added via the web interface (such as who can download the
+files).</p>
+<p>You must also select a justification for choosing INTERNAL or
+RESTRICTED. These are codes from 1-32 (inclusive). The full list of
+codes and their justifications can be accessed using
+<code><a href="https://rdrr.io/pkg/NPSdatastore/man/get_legal_authority.html" class="external-link">NPSdatastore::get_legal_authority</a></code></p>
+<p>If you choose INTERNAL or RESTRICTED you must also supply a contact
+email address for people who want to request access (we suggest a group
+email rather than in individual person’s email due to frequent personnel
+turnover) and a specific person’s name who is responsible for making the
+decision to restrict the file downloads.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">my_metadata</span> <span class="op">&lt;-</span> <span class="fu">EMLeditor</span><span class="fu">::</span><span class="fu"><a href="../reference/set_cui_code.html">set_cui_code</a></span><span class="op">(</span><span class="va">my_metadata</span>, <span class="st">"PUBLIC"</span><span class="op">)</span></span>
-<span><span class="co"># note that in this case I have added the CUI code to the original R object, </span></span>
-<span><span class="co"># "my_metadata" but by giving it a new name, i.e. "my_meta2" I could have</span></span>
-<span><span class="co"># created a new R object. Sometimes creating a new R object is preferable </span></span>
-<span><span class="co"># because if you make a mistake you don't need to start over again.</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># For public references:</span></span>
+<span><span class="va">my_metadata</span> <span class="op">&lt;-</span> <span class="fu">EMLeditor</span><span class="fu">::</span><span class="fu"><a href="../reference/set_permissions.html">set_permissions</a></span><span class="op">(</span><span class="va">my_metadata</span>, <span class="st">"PUBLIC"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># For Internal references. Make sure you have selected the correct legal_authority_id!</span></span>
+<span><span class="va">my_metadata</span> <span class="op">&lt;-</span> <span class="fu">EMLeditor</span><span class="fu">::</span><span class="fu"><a href="../reference/set_permissions.html">set_permissions</a></span><span class="op">(</span><span class="va">my_metadata</span>, </span>
+<span>                                          access <span class="op">=</span> <span class="st">"INTERNAL"</span>,</span>
+<span>                                          legal_authority_id <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>                                          contact_email <span class="op">=</span> <span class="st">"network_email@nps.gov"</span>,</span>
+<span>                                          authority_designator <span class="op">=</span> <span class="st">"Edward Abbey"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="intellectual-rights">Intellectual Rights<a class="anchor" aria-label="anchor" href="#intellectual-rights"></a>
@@ -496,13 +499,14 @@ setting the intellectual rights. It looks reasonable and so is easy to
 just keep. However, NPS has some specific regulations about what can and
 cannot be in the intellectualRights tag. Use
 <code><a href="../reference/set_int_rights.html">set_int_rights()</a></code> to replace the text with NPS-approved
-text. Note: You must first add the CUI dissemination code using
-<code><a href="../reference/set_cui.html">set_cui()</a></code> as the dissemination code and license must agree.
-That is, you cannot give a data package with a PUBLIC dissemination code
-a “restricted” license (and vise versa: a restricted data package that
-contains CUI cannot have a public domain or CC0 license). You can choose
-from one of three options, but <strong>for most public NPS data
-packages, the CC0 license is appropriate</strong>:</p>
+text. Note: You must first set the data package permissions with
+<code><a href="../reference/set_permissions.html">set_permissions()</a></code> above, as the access permissions and
+license must agree. That is, you cannot give a data package with a
+PUBLIC dissemination code a “restricted” license (and vice versa: an
+INTERNAL data package that contains CUI cannot have a public domain or
+CC0 license). You can choose from one of three options, but <strong>for
+most public NPS data packages, the CC0 license is
+appropriate</strong>:</p>
 <ul>
 <li><p>“CC0”: This is the default license for all public NPS data
 packages: <strong>“The person who associated a work with this deed has
@@ -577,7 +581,7 @@ time to construct the DRR.</p>
 <p>This is the human language (as opposed to computer language) that the
 data package and metadata are constructed in. Examples include English,
 Spanish, Navajo, etc. A full list of available languages is available
-from the Libraryof Congress. Please use the “English Name of Language”
+from the Library of Congress. Please use the “English Name of Language”
 as an input. The function will then convert your input to the
 appropriate 3-character ISO 639-2 code.Available languages: <a href="https://www.loc.gov/standards/iso639-2/php/code_list.php" class="external-link uri">https://www.loc.gov/standards/iso639-2/php/code_list.php</a></p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">

@@ -24,6 +24,7 @@ set_cui_code(
 an EML-formatted R object
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 \code{set_cui_code()} adds Controlled Unclassified Information (CUI) dissemination codes to EML metadata. These codes determine who can or cannot have access to the data. Unless you have a specific mandate to restrict data, all data should be available to the public. if the CUI dissemination code is PUBLIC, the CUI marking should also be PUBLIC (\verb{see set_cui_marking()}) and the license should be set to CC0 or public domain (see \code{set_int_rights()}). If your data contains CUI and you need to set the CUI dissemination code to anything other than PUBLIC, please be prepared to provide a legal justification in the form of the appropriate CUI marking (see \code{set_cui_marking()}).
 }
 \details{

@@ -167,8 +167,6 @@ get_additional_info <- function(eml_object) {
 #'
 #' @description get_title returns a text string that is the title of the data package
 #'
-#' @details accesses all of the <title> tags (there can be several, if each file was given a separate title). Assumes that the first instance of <title> referes to the entire data package and returns it as a text string, ignoring the contents of all other <title> tags.
-#'
 #' @inheritParams get_begin_date
 #' @return a text string
 #' @export
@@ -177,7 +175,7 @@ get_additional_info <- function(eml_object) {
 #' get_title(eml_object)
 #' }
 get_title <- function(eml_object) {
-  doc <- get_eml_simple(eml_object, "title")[1]
+  doc <- eml_object[["dataset"]][["title"]]
   if (is.null(doc)) {
     doc <- NA
   }

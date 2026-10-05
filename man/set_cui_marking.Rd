@@ -24,7 +24,7 @@ set_cui_marking(
 an EML-formatted R object
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 The Controlled Unclassified Information (CUI) marking is different from the CUI dissemination code. The CUI dissemination code (set \code{set_cui_code()}) sets who can have access to the data package. The CUI marking set by \code{set_cui_marking()} specifies the reason (if any) that the data are being restricted.
 If the CUI dissemination code is set to PUBLIC, the CUI marking must also be PUBLIC.
 If the CUI dissemination code is set to anything other than PUBLIC, the CUI marking must be set to SP-NPSR, SP-HISTP or SP-ARCHR.
