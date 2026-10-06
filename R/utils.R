@@ -117,18 +117,21 @@ globalVariables(c("UnitCode",
 #' \dontrun{
 #' .set_version(eml_object)
 #' }
+
 .set_version <- function(eml_object) {
   # get current EMLeditor package version:
   current_vers <- as.character(utils::packageVersion("EMLeditor"))
 
-  # set up additionalMetadata elements for EMLeditor:
+  # emlEditor info for EMLeditor (used both standalone and when merging):
+  eml_editor_info <- list(
+    app = "EMLeditor",
+    release = current_vers
+  )
+
+  # standalone additionalMetadata element for EMLeditor:
   eml_ed <- list(
     metadata = list(
-      emlEditor =
-        list(
-          app = "EMLeditor",
-          release = current_vers
-        )
+      emlEditor = eml_editor_info
     ),
     id = "emlEditor"
   )
@@ -139,41 +142,122 @@ globalVariables(c("UnitCode",
   # if no additionalMetadata, add in EMLeditor and current version:
   if (sum(names(add_meta) != "@context") == 0) {
     eml_object$additionalMetadata <- eml_ed
+    return(eml_object)
   }
 
-  # if there are existing additionalMetadata elements:
-  if (sum(names(add_meta) != "@context") > 0) {
-    my_list <- NULL
-    # ditch the '@context' list from the goeCoverage:
-    for (i in seq_along(names(add_meta))) {
-      if (!names(add_meta)[i] == "@context" && !names(add_meta)[i] == "id") {
-        my_list <- append(my_list, add_meta[i])
+  # build a flat list of the existing additionalMetadata elements,
+  # dropping the '@context' entry that eml_get() tacks on:
+  my_list <- NULL
+  for (i in seq_along(names(add_meta))) {
+    if (!names(add_meta)[i] == "@context" && !names(add_meta)[i] == "id") {
+      my_list <- append(my_list, add_meta[i])
+    }
+  }
+  x <- length(my_list)
+
+  # helper: does a given additionalMetadata element contain a given string?
+  contains_string <- function(el, pattern) {
+    suppressWarnings(
+      any(stringr::str_detect(unlist(el), pattern))
+    )
+  }
+
+  # locate (by index) any existing additionalMetadata elements that
+  # reference EMLassemblyline or EMLeditor. NULL if not found. Note:
+  # when x == 1, eml_object$additionalMetadata is the element itself
+  # (not a list of elements), so it is treated as index 1 without
+  # subsetting.
+  find_index <- function(pattern) {
+    if (x == 1) {
+      if (contains_string(eml_object$additionalMetadata, pattern)) {
+        return(1)
+      }
+      return(NULL)
+    }
+    for (i in seq_len(x)) {
+      if (contains_string(eml_object$additionalMetadata[[i]], pattern)) {
+        return(i)
       }
     }
-    x <- length(my_list)
+    return(NULL)
+  }
 
-    # does it include EMLeditor?
-    app <- NULL
-    for (i in seq_along(add_meta)) {
-      if (suppressWarnings(stringr::str_detect(add_meta[i], "EMLeditor"))) {
-        app <- "EMLeditor"
-      }
+  assemblyline_index <- find_index("EMLassemblyline")
+  old_emleditor_index <- find_index("EMLeditor")
+
+  get_element <- function(i) {
+    if (x == 1) eml_object$additionalMetadata else eml_object$additionalMetadata[[i]]
+  }
+  set_element <- function(i, value) {
+    if (x == 1) {
+      eml_object$additionalMetadata <<- value
+    } else {
+      eml_object$additionalMetadata[[i]] <<- value
     }
+  }
 
-    # if no info on EMLeditor, add EMLeditor to additionalMetadata
-    if (is.null(app)) {
-      if (x == 1) {
-        eml_object$additionalMetadata <- list(eml_ed,
-                                              eml_object$additionalMetadata)
-      }
+  if (!is.null(assemblyline_index)) {
+    # Merge current EMLeditor info into the EMLassemblyline element,
+    # as a sibling emlEditor entry under the same <metadata> node.
+    # This always uses current_vers, so a stale EMLeditor entry
+    # elsewhere in the document is superseded, not preserved.
+    target <- get_element(assemblyline_index)
+    existing_emleditor <- target$metadata$emlEditor
+    # if existing_emleditor is already a list-of-two (from a previous
+    # merge), keep only the first (EMLassemblyline) entry before
+    # re-merging, so we don't accumulate duplicate EMLeditor entries:
+    if (!is.null(existing_emleditor$app)) {
+      # single emlEditor entry (has app/release directly) -- keep as is
+      base_emleditor <- existing_emleditor
+    } else {
+      # list of multiple emlEditor entries -- keep only the
+      # non-EMLeditor (i.e. EMLassemblyline) one(s)
+      base_emleditor <- existing_emleditor[
+        !vapply(existing_emleditor, function(e) identical(e$app, "EMLeditor"), logical(1))
+      ]
+      if (length(base_emleditor) == 1) base_emleditor <- base_emleditor[[1]]
+    }
+    # NOTE: <metadata> only permits a single root child element per the
+    # EML schema, so we cannot have two sibling <emlEditor> elements.
+    # Instead, combine both app/release pairs as repeated children
+    # within one <emlEditor> element:
+    merged_emleditor <- list(
+      app = base_emleditor$app,
+      release = base_emleditor$release,
+      app = eml_editor_info$app,
+      release = eml_editor_info$release
+    )
+    target$metadata$emlEditor <- merged_emleditor
+    set_element(assemblyline_index, target)
+
+    # if a separate stand-alone EMLeditor additionalMetadata element
+    # also exists elsewhere, remove it now that its info has been
+    # merged into the EMLassemblyline element, to avoid duplication:
+    if (!is.null(old_emleditor_index) && old_emleditor_index != assemblyline_index) {
       if (x > 1) {
-        eml_object$additionalMetadata[[x + 1]] <- eml_ed
+        eml_object$additionalMetadata[[old_emleditor_index]] <- NULL
       }
     }
+  } else if (!is.null(old_emleditor_index)) {
+    # No EMLassemblyline element exists, but an old stand-alone
+    # EMLeditor additionalMetadata element does -- refresh its
+    # release number to the current version in place.
+    target <- get_element(old_emleditor_index)
+    target$metadata$emlEditor$release <- current_vers
+    set_element(old_emleditor_index, target)
+  } else {
+    # Neither EMLassemblyline nor EMLeditor info exists yet -- add
+    # EMLeditor as a new additionalMetadata element.
+    if (x == 1) {
+      eml_object$additionalMetadata <- list(eml_object$additionalMetadata,
+                                            eml_ed)
+    } else {
+      eml_object$additionalMetadata[[x + 1]] <- eml_ed
+    }
   }
+
   return(eml_object)
 }
-
 #' Get Park Unit Polygon
 #'
 #' @description .get_unit_polygon gets the polygon for a given park unit. The "polygon" pulled is a convexhull, the polygon is provided as in Well Known Text (WKT) format.
