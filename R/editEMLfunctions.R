@@ -2602,10 +2602,13 @@ set_int_rights <- function(eml_object,
         if(cui2 == "PUBLIC"){
           if(license == "CC0"){
             eml_object$dataset$intellectualRights <- CCzero
+            eml_object$dataset$licensed$licenseName <-
+              "Creative Commons Zero v1.0 Universal"
+
           }
           if(license == "public"){
             eml_object$dataset$intellectualRights <- pub_domain
-          }
+            eml_object$dataset$licensed$licenseName <- "Public Domain"          }
         }
         if(cui2 != "PUBLIC"){
           cli::cli_abort(c(x = paste0("To use a CC0 or public license, ",
@@ -2626,6 +2629,8 @@ set_int_rights <- function(eml_object,
         }
         if(cui2 == "RESTRICTED" || cui2 == "INTERNAL"){
           eml_object$dataset$intellectualRights <- restrict
+          eml_object$dataset$licensed$licenseName <-
+            "Unlicensed (not for public dissemination)"
         }
       }
     }
