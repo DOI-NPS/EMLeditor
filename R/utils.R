@@ -386,3 +386,118 @@ return(eml_object)
     )
   }
 }
+#' Helper function for file uploads.
+#'
+#' @param directory the data package directory
+#' @param DS_ref the 7-digit DataStore reference id (character)
+#' @param dev logical - dev vs secure API
+#' @param force logical - EMLeditor convention; FALSE = print per-file
+#'   progress, TRUE = quiet
+#' @return list(status=, ...) - see above
+#' @keywords internal
+
+.upload_package_files <- function(directory, DS_ref, dev, force, verbose = FALSE) {
+
+  # file names (no path) for display/return ...
+  files_names <- list.files(path = directory,
+                            pattern = "*\\.csv",
+                            ignore.case = TRUE)
+  files_names <- append(files_names,
+                        list.files(path = directory,
+                                   pattern = "metadata\\.xml",
+                                   ignore.case = TRUE))
+
+  # ... and the same set with full paths for the actual upload
+  files <- list.files(path = directory,
+                      pattern = "*\\.csv",
+                      full.names = TRUE,
+                      ignore.case = TRUE)
+  files <- append(files,
+                  list.files(path = directory,
+                             pattern = "metadata\\.xml",
+                             full.names = TRUE,
+                             ignore.case = TRUE))
+
+  # DS_ref is character (from str_sub of the DOI). That was fine for the old
+  # URL-building upload path, but upload_file_to_reference() validates with
+  # .validate_ref_id(), which rejects a character id ("Reference IDs must be
+  # numeric"). Coerce once here.
+  ref_id_num <- as.numeric(DS_ref)
+
+  uploaded_urls <- character(0)
+  file_info_list <- vector("list", length(files))
+
+  for (i in seq_along(files)) {
+    if (!force) {
+      cat("Uploading ", crayon::blue$bold(files_names[i]), " ...\n", sep = "")
+    }
+
+    # upload_file_to_reference() validates its response via .validate_resp(),
+    # which calls cli::cli_abort() (throws) on an error response and returns
+    # normally otherwise - so a tryCatch error handler is the correct
+    # failure path.
+    res <- tryCatch(
+      NPSdatastore::upload_file_to_reference(
+        reference_id = ref_id_num,
+        file_path = files[i],
+        dev = dev,
+        interactive = FALSE,
+        verbose = verbose
+      ),
+      error = function(e) e
+    )
+
+    if (inherits(res, "condition")) {
+      # NB: files before this one are already uploaded to the reference;
+      # this helper does not roll them back.
+      return(list(
+        status = "upload_failed",
+        reference_id = DS_ref,
+        file = files_names[i],
+        message = conditionMessage(res)
+      ))
+    }
+
+    file_info_list[[i]] <- res
+
+    # res is a one-row tibble from get_file_info(); the file URL lives in
+    # the `downloadLink` column (e.g.
+    # "https://irma.nps.gov/DataStore/DownloadFile/765062"). Index with [[
+    # guarded on column membership - never `$` on a possibly-absent column,
+    # which emits tibbles' "Unknown or uninitialised column" warning. NA
+    # fallback keeps uploaded_urls aligned with files.
+    url_i <- NA_character_
+    if ("downloadLink" %in% names(res)) {
+      val <- res[["downloadLink"]]
+      if (length(val) >= 1 && !is.na(val[1])) url_i <- as.character(val[1])
+    }
+    uploaded_urls <- append(uploaded_urls, url_i)
+
+    if (!force) {
+      cat("Uploaded ", crayon::blue$bold(files_names[i]), ".\n", sep = "")
+    }
+  }
+
+  list(
+    status = "uploaded",
+    n_files = length(files),
+    reference_id = DS_ref,
+    files = files_names,
+    uploaded_urls = uploaded_urls,
+    file_info = file_info_list
+  )
+}
+
+#' Null/empty-coalescing helper
+#'
+#' Repurposed from rlang.
+#'
+#' @param a something that can be null or have length 0
+#' @param b a non-null return value
+#' @returns a or b
+#' @name grapes-or-or-grapes
+#' @aliases %||%
+#' @keywords internal
+`%||%` <- function(a, b) if (is.null(a) ||
+                             length(a) == 0 ||
+                             (length(a) == 1 && is.na(a))) b else a

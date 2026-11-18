@@ -1,3 +1,11 @@
+# EMLeditor v1.3.1 (development version)
+## 2026-10-28
+  * add `.upload_package_files` helper function, which wraps NPSdatastore::upload_files_to_reference and escapes 32 mb file size upload ceiling.
+  * update `upload_data_package` to use `upload_package_files` (no longer subject to 32Mb file size ceiling) and be compatible with breezeml
+  
+## 2026-10-27
+  * Bug fix for `set_int_rights` when force == TRUE (again?)
+
 # EMLeditor v1.3.0 ("Angel's Landing")
 ## 2026-10-15
   * Bug fix for `set_doi` that was setting data table URLs to irmadev

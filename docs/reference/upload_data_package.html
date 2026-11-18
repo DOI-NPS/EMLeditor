@@ -47,6 +47,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
+
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">upload_data_package</span><span class="op">(</span>directory <span class="op">=</span> <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/here/man/here.html" class="external-link">here</a></span><span class="op">(</span><span class="op">)</span>, force <span class="op">=</span> <span class="cn">FALSE</span>, dev <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -59,11 +60,15 @@
 
 
 <dt id="arg-force">force<a class="anchor" aria-label="anchor" href="#arg-force"></a></dt>
-<dd><p>logical, defaults to FALSE for a verbose interactive version. Set to TRUE to suppress interactions and facilitate scripting.</p></dd>
+<dd><p>logical, defaults to FALSE for an interactive version. Set to TRUE to suppress interactions and facilitate scripting.</p></dd>
 
 
 <dt id="arg-dev">dev<a class="anchor" aria-label="anchor" href="#arg-dev"></a></dt>
 <dd><p>Logical. Defaults to FALSE. When dev = TRUE, all api actions are re-routed to the development server (as opposed to when dev = FALSE when api actions will target the production server).</p></dd>
+
+
+<dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
+<dd><p>Logical. Should the NPSdatastore based API return verbose response? Warning: this can be quite verbose and is only useful for debugging API issues.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -76,7 +81,7 @@
 <p>Once uploaded, you are advised to look at the 'Files and Links' tab on the DataStore web interface to make sure your files are there and you do not have any duplicates. You can delete files as necessary from the 'Files and Links' tab until the reference is activated.</p>
 <p>This function is primarily intended for uploading files to the data package reference type on DataStore, but will upload .csvs and a single EML metadata file saved as *_metadata.xml file to any reference type, assuming the metadata has a DOI listed in the expected location and there is a corresponding draft reference on DataStore.</p>
 <p>Due to a known bug in the DataStore API, you can only use this function to upload files once. If you need to replace files, you must do that through the DataStore GUI.</p>
-<p>#' If you would like to test out the function without making uploading to DataStore, set the parameter dev=TRUE. That will re-route all of the API requests to the development server. You must be logged in to the VPN to access irmadev and you must have a draft reference on the dev server (using set_datastore_doi() with dev=TRUE).</p>
+<p>If you would like to test out the function without making uploading to DataStore, set the parameter dev=TRUE. That will re-route all of the API requests to the development server. You must be logged in to the VPN to access irmadev and you must have a draft reference on the dev server (using set_datastore_doi() with dev=TRUE).</p>
     </div>
 
     <div class="section level2">

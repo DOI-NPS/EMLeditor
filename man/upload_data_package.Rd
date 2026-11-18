@@ -4,14 +4,21 @@
 \alias{upload_data_package}
 \title{Upload a data package to DataStore}
 \usage{
-upload_data_package(directory = here::here(), force = FALSE, dev = FALSE)
+upload_data_package(
+  directory = here::here(),
+  force = FALSE,
+  dev = FALSE,
+  verbose = FALSE
+)
 }
 \arguments{
 \item{directory}{the location (path) to your data package files}
 
-\item{force}{logical, defaults to FALSE for a verbose interactive version. Set to TRUE to suppress interactions and facilitate scripting.}
+\item{force}{logical, defaults to FALSE for an interactive version. Set to TRUE to suppress interactions and facilitate scripting.}
 
 \item{dev}{Logical. Defaults to FALSE. When dev = TRUE, all api actions are re-routed to the development server (as opposed to when dev = FALSE when api actions will target the production server).}
+
+\item{verbose}{Logical. Should the NPSdatastore based API return verbose response? Warning: this can be quite verbose and is only useful for debugging API issues.}
 }
 \value{
 invisible(NULL)
@@ -28,7 +35,7 @@ This function is primarily intended for uploading files to the data package refe
 
 Due to a known bug in the DataStore API, you can only use this function to upload files once. If you need to replace files, you must do that through the DataStore GUI.
 
-#' If you would like to test out the function without making uploading to DataStore, set the parameter dev=TRUE. That will re-route all of the API requests to the development server. You must be logged in to the VPN to access irmadev and you must have a draft reference on the dev server (using set_datastore_doi() with dev=TRUE).
+If you would like to test out the function without making uploading to DataStore, set the parameter dev=TRUE. That will re-route all of the API requests to the development server. You must be logged in to the VPN to access irmadev and you must have a draft reference on the dev server (using set_datastore_doi() with dev=TRUE).
 }
 \examples{
  \dontrun{
